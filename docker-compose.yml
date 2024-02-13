@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: links
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      db_network:
+        ipv4_address: 172.18.0.2
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: pma_links
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: user
+      PMA_PASSWORD: user
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8083:80
+    depends_on:
+      - db
+    networks:
+      db_network:
+        ipv4_address: 172.18.0.3
+
+volumes:
+  db_data:
+
+networks:
+  db_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+

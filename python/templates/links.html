@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Status</title>
+    <link rel="stylesheet" href="">
+    <style>
+      /* Variables */
+      :root {
+          --primary-color: #007bff;
+          --success-color: #28a745;
+          --error-color: #dc3545;
+      }
+
+      /* Base styles */
+      html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+      }
+
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+      }
+
+      .container {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+      }
+
+      h2 {
+          color: var(--primary-color);
+      }
+
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+      }
+
+      th, td {
+          border: 1px solid #ddd;
+          padding: 10px;
+          text-align: left;
+      }
+
+      th {
+          background-color: #f2f2f2;
+      }
+
+      tr:nth-child(even) {
+          background-color: #f9f9f9;
+      }
+
+      /* Modifier classes */
+      .online {
+          color: var(--success-color);
+      }
+
+      .offline {
+          color: var(--error-color);
+      }
+    </style>
+</head>
+<body>
+    {% for table in sorted_tables %}
+    <div class="container">
+        <h2 onclick="toggleTable('{{ table }}')" style="cursor: pointer;">{{ table }}</h2>
+        <div id="{{ table }}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom du client</th>
+                        <th>Adresse IP</th>
+                        <th>Statut Ping</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in results[table] %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td class="{% if row[2] == 0 %}online{% else %}offline{% endif %}">
+                            {% if row[2] == 0 %} Up {% else %} Down {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script>
+        function toggleTable(tableId) {
+            var table = document.getElementById(tableId);
+            if (table.style.display === 'none') {
+                table.style.display = 'block';
+            } else {
+                table.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
+
