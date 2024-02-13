@@ -3,14 +3,23 @@ from flask import Flask, render_template
 import subprocess
 import mysql.connector
 import threading
+import datetime
 
 app = Flask(__name__)
 
-# Fonction pour exécuter la commande ping
 def ping_host(ip):
     command = ['ping', '-c', '1', ip]
-    result = subprocess.run(command, stdout=subprocess.PIPE)
-    return result.returncode
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    ping_status = result.returncode
+    last_successful_ping = None
+    message = ""
+    
+    if ping_status == 0:
+        last_successful_ping = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    else:
+        message = result.stderr.decode('utf-8')
+        
+    return ping_status, last_successful_ping, message
 
 # Fonction pour se connecter à la base de données MySQL et récupérer les données
 def get_data_from_db(table_name):
@@ -35,16 +44,33 @@ def get_data_from_db(table_name):
             connection.close()
     return data
 
-# Fonction pour récupérer les données de la base de données en utilisant un thread
 def get_data_from_db_thread(table_name, results):
     data = get_data_from_db(table_name)
     if data is not None:
         ping_results = []
         for row in data:
             client_name, ip_address = row
-            ping_status = ping_host(ip_address)
-            ping_results.append((client_name, ip_address, ping_status))
+            ping_status, last_successful_ping, message = ping_host(ip_address)
+            if ping_status != 0:
+                reason = "Ping failed: " + message if message else "Ping failed"
+                last_ping = last_successful_ping if last_successful_ping else ""
+            else:
+                reason = ""
+                last_ping = last_successful_ping if last_successful_ping else ""
+            ping_results.append((client_name, ip_address, ping_status, reason, last_ping))
+
+        # Tri des résultats avec les états "Up" en premier suivi des états "Down"
+        ping_results.sort(key=lambda x: (x[2] == 0, x[2]))
+
+        if table_name in results:
+            previous_results = results[table_name]
+            for previous_result, new_result in zip(previous_results, ping_results):
+                # Si le statut du ping change de Up à Down, mettez à jour le last_successful_ping
+                if previous_result[2] == 0 and new_result[2] != 0:
+                    new_result = (*new_result[:-1], previous_result[4])
+
         results[table_name] = ping_results
+
 
 # Fonction de tri personnalisée pour vérifier la présence d'une adresse IP dans les résultats
 def custom_sort(results):

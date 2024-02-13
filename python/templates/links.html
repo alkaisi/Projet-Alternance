@@ -1,3 +1,4 @@
+<!-- links.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +7,13 @@
     <title>Ping Status</title>
     <link rel="stylesheet" href="">
     <style>
+      /* styles_links.css */
+
       /* Variables */
       :root {
-          --primary-color: #007bff;
-          --success-color: #28a745;
-          --error-color: #dc3545;
+          --primary-color: #ffff00; /* Jaune */
+          --success-color: #28a745; /* Vert */
+          --error-color: #dc3545; /* Rouge */
       }
 
       /* Base styles */
@@ -18,11 +21,9 @@
           height: 100%;
           margin: 0;
           padding: 0;
-      }
-
-      body {
           font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
+          background-color: #000000; /* Noir */
+          color: #ffff00; /* Jaune */
       }
 
       .container {
@@ -42,27 +43,28 @@
       }
 
       th, td {
-          border: 1px solid #ddd;
+          border: 1px solid #ffff00; /* Jaune */
           padding: 10px;
           text-align: left;
       }
 
       th {
-          background-color: #f2f2f2;
+          background-color: #000000; /* Noir */
       }
 
       tr:nth-child(even) {
-          background-color: #f9f9f9;
+          background-color: #222222; /* Gris foncé */
       }
 
       /* Modifier classes */
       .online {
-          color: var(--success-color);
+          color: #28a745; /* Vert */
       }
 
       .offline {
-          color: var(--error-color);
+          color: #dc3545; /* Rouge */
       }
+
     </style>
 </head>
 <body>
@@ -76,6 +78,8 @@
                         <th>Nom du client</th>
                         <th>Adresse IP</th>
                         <th>Statut Ping</th>
+                        <th>Message</th>
+                        <th>Dernier ping réussi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,6 +90,8 @@
                         <td class="{% if row[2] == 0 %}online{% else %}offline{% endif %}">
                             {% if row[2] == 0 %} Up {% else %} Down {% endif %}
                         </td>
+                        <td>{{ row[3] }}</td>
+                        <td>{{ row[4] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

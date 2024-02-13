@@ -6,9 +6,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000000; /* Noir */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    color: #ffff00; /* Jaune */
+}
+
+form {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #ffff00; /* Jaune */
+    color: #000000; /* Noir */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555555; /* Gris foncé */
+    color: white;
+}
+
+    </style>
 </head>
 <body>
-    <h1>Index Page</h1>
     <form action="/links" method="get">
         <button type="submit">Links Ping</button>
     </form>
