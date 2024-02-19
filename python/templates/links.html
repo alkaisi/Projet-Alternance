@@ -1,4 +1,3 @@
-<!-- links.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,8 +6,6 @@
     <title>Ping Status</title>
     <link rel="stylesheet" href="">
     <style>
-      /* styles_links.css */
-
       /* Variables */
       :root {
           --primary-color: #ffff00; /* Jaune */
@@ -31,8 +28,14 @@
           margin: 0 auto;
           padding: 20px;
       }
+      
+      h1 {
+          max-width: 800px;
+          margin: 0 auto;
+          padding-bottom: 20px;
+      }
 
-      h2 {
+      h1, h2 {
           color: var(--primary-color);
       }
 
@@ -64,10 +67,84 @@
       .offline {
           color: #dc3545; /* Rouge */
       }
+      
+      .empty-ip {
+          opacity: 0.5; /* Opacity for visually disabled rows */
+      }
+      
+      /* Ajout de classes pour les filtres */
+      .up {
+          display: table-row;
+      }
 
+      .down {
+          display: table-row;
+      }
+      
+      label {
+          font-weight: bold;
+      }
+      
+      #status-filter {
+          padding: 5px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          color: #333;
+          font-size: 14px;
+      }
+
+      #status-filter option {
+          background-color: #fff;
+          color: #333;
+      }
+      
+      /* Ajouter du style aux compteurs */
+      .count.disabled {
+          display: none; /* Masquer les compteurs */
+          pointer-events: none; /* Désactiver les événements de pointer */
+          opacity: 0.5; /* Appliquer une opacité pour indiquer qu'ils sont désactivés */
+      }
+
+      #up-count, #down-count {
+          margin-left: 20px; /* Ajouter une marge à gauche pour les espacer des filtres */
+          font-weight: bold; /* Mettre en gras */
+      }
+
+      #up-count::before {
+          content: "\25B2"; /* Ajouter une flèche vers le haut avant le texte */
+          margin-right: 5px; /* Ajouter un espace entre la flèche et le texte */
+          color: #28a745; /* Couleur verte */
+      }
+
+      #down-count::before {
+          content: "\25BC"; /* Ajouter une flèche vers le bas avant le texte */
+          margin-right: 5px; /* Ajouter un espace entre la flèche et le texte */
+          color: #dc3545; /* Couleur rouge */
+      }
     </style>
 </head>
 <body>
+    <div class="container">
+        <label for="status-filter">Filtrer par statut :</label>
+        <select id="status-filter" onchange="filterResults()">
+            <option value="all" selected>Tout</option>
+            <option value="up">Up</option>
+            <option value="down">Down</option>
+        </select>
+        
+        <span id="up-count" class="count">Clients Up: 0</span>
+        <span id="down-count" class="count">Clients Down: 0</span>
+
+    </div>
+    
+    <!-- Empty div for combined table -->
+    <div class="container">
+        <div id="combined-table" style="display: none;"></div>
+    </div>
+    
+    <h1>Les clients par type de lien :</h1>
+    
     {% for table in sorted_tables %}
     <div class="container">
         <h2 onclick="toggleTable('{{ table }}')" style="cursor: pointer;">{{ table }}</h2>
@@ -84,7 +161,7 @@
                 </thead>
                 <tbody>
                     {% for row in results[table] %}
-                    <tr>
+                    <tr class="{% if row[1] == '' %}empty-ip{% endif %}">
                         <td>{{ row[0] }}</td>
                         <td>{{ row[1] }}</td>
                         <td class="{% if row[2] == 0 %}online{% else %}offline{% endif %}">
@@ -99,8 +176,72 @@
         </div>
     </div>
     {% endfor %}
-
+    
     <script>
+        function filterResults() {
+            var selectedStatus = document.getElementById("status-filter").value;
+            var rows = document.querySelectorAll("tbody tr");
+            var filteredRows = [];
+            var upCount = 0; // Compteur pour les clients Up
+            var downCount = 0; // Compteur pour les clients Down
+
+            rows.forEach(function(row) {
+                var statusCell = row.querySelector("td:nth-child(3)");
+                var statusText = statusCell.textContent.trim();
+                var ipCell = row.querySelector("td:nth-child(2)");
+                var ipText = ipCell.textContent.trim();
+                
+                if ((selectedStatus === "all" || statusText.toLowerCase() === selectedStatus) && ipText !== '') {
+                    row.style.display = ""; // Show rows that match the filter
+                    if (selectedStatus === "down" && statusText.toLowerCase() === "down") {
+                        filteredRows.push(row.outerHTML); // Store HTML content of rows with status "Down"
+                    }
+                    // Mettre à jour les compteurs en fonction du statut
+                    if (statusText.toLowerCase() === "up") {
+                        upCount++;
+                    } else if (statusText.toLowerCase() === "down") {
+                        downCount++;
+                    }
+                } else {
+                    row.style.display = "none"; // Hide rows that don't match the filter
+                }
+            });
+
+            var combinedTable = document.getElementById("combined-table");
+
+            if (selectedStatus === "down") {
+                combinedTable.innerHTML = '<h1>Tous les clients en status Down :</h1>' + '<table>' + '<thead>' + '<tr>' + '<th>Nom du client</th>' + '<th>Adresse IP</th>' + '<th>Statut Ping</th>' + '<th>Message</th>' + '<th>Dernier ping réussi</th>' + '</tr>' + '</thead>' + '<tbody>' + filteredRows.join("") + '</tbody>' + '</table>'; // Display combined table for "Down" status
+                combinedTable.style.display = "block";
+            } else {
+                combinedTable.innerHTML = ''; // Clear combined table
+                combinedTable.style.display = "none";
+            }
+            
+            // Mettre à jour les compteurs affichés
+            var countElements = document.querySelectorAll(".count");
+            if (selectedStatus !== "all") {
+                countElements.forEach(function(element) {
+                    element.classList.remove("disabled"); // Activer les compteurs
+                });
+                document.getElementById("up-count").textContent = "Clients Up: " + upCount;
+                document.getElementById("down-count").textContent = "Clients Down: " + downCount;
+            } else {
+                countElements.forEach(function(element) {
+                    element.classList.add("disabled"); // Désactiver les compteurs
+                });
+            }
+        }
+
+        // Hide rows with empty IP addresses by default
+        window.onload = function() {    
+            // Définir le statut du filtre par défaut sur "Down"
+            document.getElementById("status-filter").value = "down";
+            
+            // Appliquer le filtre au chargement de la page
+            filterResults();
+        };
+
+
         function toggleTable(tableId) {
             var table = document.getElementById(tableId);
             if (table.style.display === 'none') {
@@ -109,6 +250,11 @@
                 table.style.display = 'none';
             }
         }
+
+		// Recharge la page toutes les 10 secondes (en millisecondes)
+        setTimeout(function() {
+            location.reload();
+        }, 10 * 1000);
     </script>
 </body>
 </html>
