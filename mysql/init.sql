@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db:3306
--- Generation Time: Feb 13, 2024 at 09:24 AM
+-- Generation Time: Feb 20, 2024 at 10:49 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.8
 
@@ -24,13 +24,25 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `00_Choisir_la_table`
+--
+
+CREATE TABLE `00_Choisir_la_table` (
+  `id` int NOT NULL,
+  `nom_client` varchar(255) DEFAULT NULL,
+  `adresse_ip` varchar(15) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `4G`
 --
 
 CREATE TABLE `4G` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -61,8 +73,8 @@ INSERT INTO `4G` (`id`, `nom_client`, `adresse_ip`) VALUES
 
 CREATE TABLE `ADSL` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -73,8 +85,8 @@ CREATE TABLE `ADSL` (
 
 CREATE TABLE `A_FTTB` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -85,8 +97,8 @@ CREATE TABLE `A_FTTB` (
 
 CREATE TABLE `FIBRE_FTTE` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -104,8 +116,8 @@ INSERT INTO `FIBRE_FTTE` (`id`, `nom_client`, `adresse_ip`) VALUES
 
 CREATE TABLE `FIBRE_OPTIQUE` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -126,8 +138,8 @@ INSERT INTO `FIBRE_OPTIQUE` (`id`, `nom_client`, `adresse_ip`) VALUES
 
 CREATE TABLE `FO_ASYMETRIQUE` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -138,8 +150,8 @@ CREATE TABLE `FO_ASYMETRIQUE` (
 
 CREATE TABLE `FO_NOIRE` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -150,8 +162,8 @@ CREATE TABLE `FO_NOIRE` (
 
 CREATE TABLE `FTTB` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -162,8 +174,8 @@ CREATE TABLE `FTTB` (
 
 CREATE TABLE `FTTH` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -256,8 +268,8 @@ INSERT INTO `FTTH` (`id`, `nom_client`, `adresse_ip`) VALUES
 
 CREATE TABLE `GTR` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -268,8 +280,8 @@ CREATE TABLE `GTR` (
 
 CREATE TABLE `PAIRE_FO_NOIRE` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -280,8 +292,8 @@ CREATE TABLE `PAIRE_FO_NOIRE` (
 
 CREATE TABLE `SDLS_EFM` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -292,8 +304,8 @@ CREATE TABLE `SDLS_EFM` (
 
 CREATE TABLE `SDSL_ATM` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -304,8 +316,8 @@ CREATE TABLE `SDSL_ATM` (
 
 CREATE TABLE `VDSL` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -326,13 +338,19 @@ INSERT INTO `VDSL` (`id`, `nom_client`, `adresse_ip`) VALUES
 
 CREATE TABLE `WIFI` (
   `id` int NOT NULL,
-  `nom_client` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `adresse_ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nom_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adresse_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `00_Choisir_la_table`
+--
+ALTER TABLE `00_Choisir_la_table`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `4G`
@@ -427,6 +445,12 @@ ALTER TABLE `WIFI`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `00_Choisir_la_table`
+--
+ALTER TABLE `00_Choisir_la_table`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `4G`
