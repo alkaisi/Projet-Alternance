@@ -16,21 +16,21 @@
       /* Base styles */
       html, body {
           height: 100%;
-          margin: 0;
-          padding: 0;
           font-family: Arial, sans-serif;
-          background-color: #000000; /* Noir */
+          background-color: #1a1a1a; /* Noir */
           color: #ffff00; /* Jaune */
+          max-width: 100%;
       }
 
       .container {
-          max-width: 800px;
+          max-width: 100%;
           margin: 0 auto;
           padding: 20px;
+          text-align: justify;
       }
       
       h1 {
-          max-width: 800px;
+          max-width: 100%;
           margin: 0 auto;
           padding-bottom: 20px;
       }
@@ -48,7 +48,7 @@
       th, td {
           border: 1px solid #ffff00; /* Jaune */
           padding: 10px;
-          text-align: left;
+          text-align: justify;
       }
 
       th {
@@ -143,38 +143,40 @@
         <div id="combined-table" style="display: none;"></div>
     </div>
     
-    <h1>Les clients par type de lien :</h1>
+    <div class="container">
+      <h1>Les clients par type de lien :</h1>
+    </div>
     
     {% for table in sorted_tables %}
-    <div class="container">
-        <h2 onclick="toggleTable('{{ table }}')" style="cursor: pointer;">{{ table }}</h2>
-        <div id="{{ table }}">
-            <table>
-                <thead>
-                    <tr>
-                        <th>(N° lien) Nom du client</th>
-                        <th>Adresse IP</th>
-                        <th>Statut Ping</th>
-                        <th>Message</th>
-                        <th>Dernier ping réussi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in results[table] %}
-                    <tr class="{% if row[1] == '' %}empty-ip{% endif %}">
-                        <td>{{ row[0] }}</td>
-                        <td>{{ row[1] }}</td>
-                        <td class="{% if row[2] == 0 %}online{% else %}offline{% endif %}">
-                            {% if row[2] == 0 %} Up {% else %} Down {% endif %}
-                        </td>
-                        <td>{{ row[3] }}</td>
-                        <td>{{ row[4] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="container">
+            <h2 onclick="toggleTable('{{ table }}')" style="cursor: pointer;">{{ table }}</h2>
+            <div id="{{ table }}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>(N° lien) Nom du client</th>
+                            <th>Adresse IP</th>
+                            <th>Statut Ping</th>
+                            <th>Message</th>
+                            <th>Dernier ping réussi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results[table] %}
+                        <tr class="{% if row[1] == '' %}empty-ip{% endif %}">
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td class="{% if row[2] == 0 %}online{% else %}offline{% endif %}">
+                                {% if row[2] == 0 %} Up {% else %} Down {% endif %}
+                            </td>
+                            <td>{{ row[3] }}</td>
+                            <td>{{ row[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     {% endfor %}
     
     <script>
