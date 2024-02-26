@@ -158,7 +158,6 @@
                             <th>Adresse IP</th>
                             <th>Statut Ping</th>
                             <th>Message</th>
-                            <th>Dernier ping réussi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -170,7 +169,6 @@
                                 {% if row[2] == 0 %} Up {% else %} Down {% endif %}
                             </td>
                             <td>{{ row[3] }}</td>
-                            <td>{{ row[4] }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -212,7 +210,7 @@
             var combinedTable = document.getElementById("combined-table");
 
             if (selectedStatus === "down") {
-                combinedTable.innerHTML = '<h1>Tous les clients en status Down :</h1>' + '<table>' + '<thead>' + '<tr>' + '<th>(N° lien) Nom du client</th>' + '<th>Adresse IP</th>' + '<th>Statut Ping</th>' + '<th>Message</th>' + '<th>Dernier ping réussi</th>' + '</tr>' + '</thead>' + '<tbody>' + filteredRows.join("") + '</tbody>' + '</table>'; // Display combined table for "Down" status
+                combinedTable.innerHTML = '<h1>Tous les clients en status Down :</h1>' + '<table>' + '<thead>' + '<tr>' + '<th>(N° lien) Nom du client</th>' + '<th>Adresse IP</th>' + '<th>Statut Ping</th>' + '<th>Message</th>' + '</tr>' + '</thead>' + '<tbody>' + filteredRows.join("") + '</tbody>' + '</table>'; // Display combined table for "Down" status
                 combinedTable.style.display = "block";
             } else {
                 combinedTable.innerHTML = ''; // Clear combined table

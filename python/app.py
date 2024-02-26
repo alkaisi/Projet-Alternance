@@ -4,6 +4,9 @@ import mysql.connector.pooling
 import concurrent
 from concurrent.futures import ThreadPoolExecutor
 import datetime
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 
@@ -50,8 +53,7 @@ def get_data_from_db(table_name):
         if connection:
             connection.close()
     return data
-
-
+        
 def get_data_from_db_and_ping(table_name):
     data = get_data_from_db(table_name)
     if data is not None:
@@ -80,6 +82,51 @@ def custom_sort(results):
     
     tables_with_ip = [table for table in results if has_ip_address(table)]
     return sorted(tables_with_ip, key=has_ip_address, reverse=True)
+    
+# Fonction pour envoyer un email
+def send_email(subject, body):
+    sender_email = "support@dsl-network.fr"  # Modifier avec votre adresse email
+    receiver_email = "support@dsl-network.fr"  # Modifier avec l'adresse email du destinataire
+    password = "3185Joana"  # Modifier avec votre mot de passe
+
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+    message.attach(MIMEText(body, "plain"))
+
+    try:
+        server = smtplib.SMTP("smtp.office365.com", 587)
+        server.starttls()
+        server.login(sender_email, password)
+        text = message.as_string()
+        server.sendmail(sender_email, receiver_email, text)
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Error sending email: {e}")
+    finally:
+        server.quit()
+        
+def check_status_change(previous_results, current_results):
+    for table_name, current_data in current_results.items():
+        previous_data = previous_results.get(table_name, [])
+        for i, (client_name, ip_address, ping_status, reason, last_ping) in enumerate(current_data):
+            previous_status = None
+            if i < len(previous_data):
+                previous_status = previous_data[i][2]
+            if previous_status is not None and previous_status != ping_status:
+                if ping_status == 0:
+                    subject = f"{client_name} : Changement de statut - Liaison Up"
+                    body = f"La liaison {client_name} avec l'adresse IP {ip_address} est maintenant Up."
+                    send_email(subject, body)
+                else:
+                    # Check if the client transitioned from "Up" to "Down"
+                    if previous_status == 0:
+                        last_successful_ping = previous_data[i][4]
+                        subject = f"{client_name} : Changement de statut - Liaison Down"
+                        body = f"La liaison {client_name} avec l'adresse IP {ip_address} est maintenant Down.\n" \
+                               f"Dernier ping réussi: {last_successful_ping}"
+                        send_email(subject, body)
 
 @app.route('/')
 def index():
@@ -101,6 +148,11 @@ def test_links():
                 print(f"Error processing {table_name}: {e}")
 
     sorted_tables = custom_sort(results)
+    
+    # Vérification des changements de statut et envoi d'email en conséquence
+    if 'previous_results' in globals():
+        check_status_change(previous_results, results)
+    globals()['previous_results'] = results.copy()
 
     return render_template('links.html', results=results, sorted_tables=sorted_tables)
 
