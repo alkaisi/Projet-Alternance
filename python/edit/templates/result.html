@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultat</title>
+</head>
+<body>
+    <h1>Résultat</h1>
+    {% if short_url %}
+        <p>URL raccourcie créée avec succès :</p>
+        <a href="{{ short_url }}">{{ short_url }}</a>
+    {% else %}
+        <p>Une erreur s'est produite lors de la création de l'URL raccourcie.</p>
+    {% endif %}
+</body>
+</html>
+

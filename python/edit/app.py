@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import mysql.connector
+import urllib.request
 
 app = Flask(__name__)
 
@@ -27,6 +28,16 @@ def get_clients():
     clients = [client[0] for client in cursor.fetchall()]
     cursor.close()
     return jsonify(clients)
+    
+def create_short_url(long_url, alias=None):
+    api_url = "http://tinyurl.com/api-create.php?url=" + long_url
+    if alias:
+        api_url += "&alias=" + alias
+    response = urllib.request.urlopen(api_url)
+    if response.status == 200:
+        return response.read().decode('utf-8')
+    else:
+        return None
 
 # Page d'accueil
 @app.route('/')
@@ -41,10 +52,13 @@ def ajouter():
 def modifier():
     return render_template('modifier.html')
     
-# Route pour afficher le menu de suppression
 @app.route('/supprimer')
 def supprimer():
     return render_template('supprimer.html')
+    
+@app.route('/shorturl')
+def shorturl():
+    return render_template('shorturl.html')
 
 # Page pour ajouter un client
 @app.route('/ajouter/client', methods=['GET', 'POST'])
@@ -68,7 +82,7 @@ def ajouter_client():
         db.commit()
         cursor.close()
 
-        return "<span style='color: green;'>Client ajouté avec succès à la table {}</span>".format(table_nom)
+        return "<span style='color: green;'>Client ajouté avec succès à la table {}. <a href='http://127.0.0.1:5001/shorturl'>N'oubliez pas de créer un raccourci pour ce client !</a>.</span>".format(table_nom)
 
     else:
         cursor = db.cursor()
@@ -236,7 +250,19 @@ def supprimer_table():
         cursor.close()
 
         return render_template('supprimer_table.html', tables=tables)
-
+        
+@app.route('/process_shorturl', methods=['POST'])
+def process_shorturl():
+    long_url = request.form['long_url']
+    alias = request.form['alias'] if 'alias' in request.form else None
+    
+    # Appel à la fonction pour créer l'URL raccourcie
+    short_url = create_short_url(long_url, alias)
+    
+    if short_url:
+        return render_template('result.html', short_url=short_url)
+    else:
+        return "Une erreur s'est produite lors de la création de l'URL raccourcie."
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
 

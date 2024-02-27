@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saisie URL Longue</title>
+    <style>
+    /* Réinitialisation CSS */
+      html, body, form, label, input, select, option {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box; 
+      }
+
+      /* Styles pour le corps de la page */
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #000; /* Noir */
+          color: #ff0; /* Jaune */
+          padding: 20px;
+      }
+
+      /* Styles pour le titre */
+      h1 {
+          color: #ff0; /* Jaune */
+          text-align: center;
+          margin-bottom: 20px;
+      }
+
+      /* Styles pour le formulaire */
+      form {
+          max-width: 400px;
+          margin: 0 auto;
+          text-align: justify; /* Justifier le contenu */
+      }
+
+      /* Styles pour les libellés */
+      label {
+          display: block;
+          margin-bottom: 5px;
+          color: #ff0; /* Jaune */
+      }
+
+      /* Styles pour les zones de texte */
+      input[type="text"],
+      select {
+          width: 100%;
+          padding: 8px;
+          margin-bottom: 10px;
+          border: 1px solid #ff0; /* Jaune */
+          background-color: #000; /* Noir */
+          color: #ff0; /* Jaune */
+      }
+
+      /* Styles pour le bouton */
+      input[type="submit"] {
+          width: 100%;
+          padding: 10px;
+          background-color: #ff0; /* Jaune */
+          color: #000; /* Noir */
+          border: none;
+          cursor: pointer;
+          transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+          background-color: #000; /* Noir */
+          color: #ff0; /* Jaune */
+      }
+
+    </style>
+</head>
+<body>
+    <h1>Long URL to Short URL</h1>
+    <form action="/process_shorturl" method="post">
+        <label for="long_url">URL de lien :</label><br>
+        <input type="text" id="long_url" name="long_url" required><br>
+        <label for="alias">Numéro de lien :</label><br>
+        <input type="text" id="alias" name="alias"><br><br>
+        <input type="submit" value="Raccourcir l'URL">
+    </form>
+</body>
+</html>
+

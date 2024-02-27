@@ -7,6 +7,7 @@ import datetime
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import re
 
 app = Flask(__name__)
 
@@ -107,6 +108,14 @@ def send_email(subject, body):
     finally:
         server.quit()
         
+# Fonction pour extraire le texte entre parenthèses
+def extract_client_name(client_name):
+    match = re.search(r'\((.*?)\)', client_name)
+    if match:
+        return match.group(1)
+    else:
+        return None
+        
 def check_status_change(previous_results, current_results):
     for table_name, current_data in current_results.items():
         previous_data = previous_results.get(table_name, [])
@@ -117,16 +126,35 @@ def check_status_change(previous_results, current_results):
             if previous_status is not None and previous_status != ping_status:
                 if ping_status == 0:
                     subject = f"{client_name} : Changement de statut - Liaison Up"
-                    body = f"La liaison {client_name} avec l'adresse IP {ip_address} est maintenant Up."
+                    client_name_extracted = extract_client_name(client_name)
+                    if client_name_extracted:
+                        # Créer le lien avec le texte extrait du nom du client
+                        client_link = "https://tinyurl.com/" + client_name_extracted
+                        body = f"Le client avec l'adresse IP {ip_address} est maintenant Up.\n" \
+                               f"Lien de client: {client_link}."
+                    else:
+                        # Si aucun texte n'est extrait, envoyer l'e-mail sans le lien
+                        body = f"Le client avec l'adresse IP {ip_address} est maintenant Up."
                     send_email(subject, body)
                 else:
                     # Check if the client transitioned from "Up" to "Down"
                     if previous_status == 0:
                         last_successful_ping = previous_data[i][4]
-                        subject = f"{client_name} : Changement de statut - Liaison Down"
-                        body = f"La liaison {client_name} avec l'adresse IP {ip_address} est maintenant Down.\n" \
-                               f"Dernier ping réussi: {last_successful_ping}"
-                        send_email(subject, body)
+                        client_name_extracted = extract_client_name(client_name)
+                        if client_name_extracted:
+                            # Créer le lien avec le texte extrait du nom du client
+                            client_link = "https://tinyurl.com/" + client_name_extracted
+                            subject = f"{client_name} : Changement de statut - Liaison Down"
+                            body = f"Le client avec l'adresse IP {ip_address} est maintenant Down.\n" \
+                                   f"Dernier ping réussi: {last_successful_ping}.\n" \
+                                   f"Lien de client: {client_link}."
+                            send_email(subject, body)
+                        else:
+                            # Si aucun texte n'est extrait, envoyer l'e-mail sans le lien
+                            subject = f"{client_name} : Changement de statut - Liaison Down"
+                            body = f"La liaison {client_name} avec l'adresse IP {ip_address} est maintenant Down.\n" \
+                                   f"Dernier ping réussi: {last_successful_ping}."
+                            send_email(subject, body)
 
 @app.route('/')
 def index():
