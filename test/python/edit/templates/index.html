@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Principal</title>
+    <style>
+      /* Réinitialisation CSS */
+      html, body, ul, li, a {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box; /* Inclure les marges et les bordures dans le calcul de la taille */
+      }
+
+      /* Styles pour le corps de la page */
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #000; /* Noir */
+          color: #ff0; /* Jaune */
+          padding: 20px;
+          text-align: center;
+      }
+
+      /* Styles pour le titre */
+      h1 {
+          color: #ff0; /* Jaune */
+          text-align: center;
+          margin-bottom: 20px;
+      }
+
+      /* Styles pour la liste */
+      ul {
+          list-style-type: none;
+          text-align: center;
+      }
+
+      /* Styles pour les éléments de liste */
+      li {
+          margin-bottom: 10px;
+          text-align: center;
+      }
+
+      /* Styles pour les liens */
+      a {
+          display: block;
+          padding: 10px;
+          text-decoration: none;
+          color: #ff0; /* Jaune */
+          background-color: #000; /* Noir */
+          border: 1px solid #ff0; /* Jaune */
+          text-align: center;
+          transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      a:hover {
+          background-color: #ff0; /* Jaune */
+          color: #000; /* Noir */
+      }
+
+    </style>
+</head>
+<body>
+    <h1>Menu Principal :</h1>
+    <ul>
+        <li><a href="{{ url_for('ajouter') }}">Ajouter</a></li>
+        <li><a href="{{ url_for('modifier') }}">Modifier</a></li>
+        <li><a href="{{ url_for('supprimer') }}">Supprimer</a></li>
+    </ul>
+</body>
+</html>
+

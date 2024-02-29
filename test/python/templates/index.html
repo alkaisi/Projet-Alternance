@@ -1,0 +1,62 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a; /* Gris foncé */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    color: #ffff00; /* Jaune */
+}
+
+form {
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 24px;
+    background-color: #ffcc00; /* Jaune */
+    color: #1a1a1a; /* Gris foncé */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #4d4d4d; /* Gris */
+    color: #ffffff; /* Blanc */
+    transform: scale(1.1); /* agrandir légèrement le bouton au survol */
+}
+
+button:focus {
+    outline: none;
+}
+
+    </style>
+</head>
+<body>
+    <form action="/links" method="get">
+        <button type="submit">Links Ping</button>
+    </form>
+</body>
+</html>
+
