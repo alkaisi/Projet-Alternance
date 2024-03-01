@@ -4,6 +4,7 @@ import mysql.connector.pooling
 import concurrent
 from concurrent.futures import ThreadPoolExecutor
 import datetime
+import time
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -23,18 +24,19 @@ db_connection_pool = mysql.connector.pooling.MySQLConnectionPool(
 )
 
 def ping_host(ip):
-    command = ['ping', '-c', '1', '-W', '1', ip]  # Timeout de 1 seconde pour le ping
-    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    ping_status = result.returncode
+    command = ['ping', '-c', '3', '-W', '1', ip]  # Exécuter trois pings avec un timeout de 1 seconde chacun
+    results = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    ping_status = results.returncode
     last_successful_ping = None
-    message = ""
-    
+    messages = []
+
     if ping_status == 0:
         last_successful_ping = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     else:
-        message = result.stderr.decode('utf-8')
-        
-    return ping_status, last_successful_ping, message
+        if results.stderr:
+            messages.append(results.stderr.strip())
+            
+    return ping_status, last_successful_ping, messages
 
 def get_data_from_db(table_name):
     data = None
@@ -62,9 +64,9 @@ def get_data_from_db_and_ping(table_name):
         for row in data:
             client_name, ip_address = row
             if ip_address:  # Vérifie si l'adresse IP n'est pas vide
-                ping_status, last_successful_ping, message = ping_host(ip_address)
+                ping_status, last_successful_ping, messages = ping_host(ip_address)
                 if ping_status != 0:
-                    reason = "Ping failed: " + message if message else "Ping failed"
+                    reason = "Ping failed: " + ", ".join(messages) if messages else "Ping failed"
                     last_ping = last_successful_ping if last_successful_ping else ""
                 else:
                     reason = ""
@@ -185,4 +187,4 @@ def test_links():
     return render_template('links.html', results=results, sorted_tables=sorted_tables)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=5000)

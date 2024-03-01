@@ -264,6 +264,6 @@ def process_shorturl():
     else:
         return "Une erreur s'est produite lors de la création de l'URL raccourcie."
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(host='0.0.0.0', debug=True, port=5001)
 
 
